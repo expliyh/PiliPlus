@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:PiliPlus/common/constants.dart';
 import 'package:PiliPlus/main.dart';
+import 'package:PiliPlus/models/common/theme/font_family_type.dart';
 import 'package:PiliPlus/utils/extension.dart';
 import 'package:PiliPlus/utils/storage_pref.dart';
 import 'package:flex_seed_scheme/flex_seed_scheme.dart';
@@ -13,6 +16,7 @@ abstract class ThemeUtils {
     bool isDark = false,
     required FlexSchemeVariant variant,
   }) {
+    // Global font weight setting.
     final appFontWeight = Pref.appFontWeight.clamp(
       -1,
       FontWeight.values.length - 1,
@@ -20,10 +24,23 @@ abstract class ThemeUtils {
     final fontWeight = appFontWeight == -1
         ? null
         : FontWeight.values[appFontWeight];
-    late final textStyle = TextStyle(fontWeight: fontWeight);
+    // Global font family setting (Android only: serif / sans-serif / system).
+    String? fontFamily;
+    if (Platform.isAndroid) {
+      fontFamily = switch (Pref.fontFamilyType) {
+        FontFamilyType.sansSerif => 'sans-serif',
+        FontFamilyType.serif => 'serif',
+        FontFamilyType.system => null,
+      };
+    }
+
+    late final textStyle = TextStyle(
+      fontWeight: fontWeight,
+    );
     ThemeData themeData = ThemeData(
       colorScheme: colorScheme,
       useMaterial3: true,
+      fontFamily: fontFamily,
       textTheme: fontWeight == null
           ? null
           : TextTheme(

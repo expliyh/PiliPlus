@@ -10,6 +10,7 @@ import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/segment_type.dart';
 import 'package:PiliPlus/models/common/sponsor_block/skip_type.dart';
 import 'package:PiliPlus/models/common/super_resolution_type.dart';
+import 'package:PiliPlus/models/common/theme/font_family_type.dart';
 import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/models/common/video/audio_quality.dart';
 import 'package:PiliPlus/models/common/video/cdn_type.dart';
@@ -84,6 +85,11 @@ abstract class Pref {
     defaultValue: ThemeType.system.index,
   );
 
+  static int get _fontFamilyTypeInt => _setting.get(
+    SettingBoxKey.appFontFamilyType,
+    defaultValue: FontFamilyType.system.index,
+  );
+
   static ThemeMode get themeMode {
     return switch (_themeTypeInt) {
       0 => ThemeMode.light,
@@ -143,6 +149,9 @@ abstract class Pref {
       _setting.get(SettingBoxKey.defaultPicQa, defaultValue: 10);
 
   static ThemeType get themeType => ThemeType.values[_themeTypeInt];
+
+  static FontFamilyType get fontFamilyType =>
+      FontFamilyType.values[_fontFamilyTypeInt];
 
   static DynamicBadgeMode get dynamicBadgeType =>
       DynamicBadgeMode.values[_setting.get(
