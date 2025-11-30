@@ -12,6 +12,7 @@ import 'package:PiliPlus/models/common/home_tab_type.dart';
 import 'package:PiliPlus/models/common/msg/msg_unread_type.dart';
 import 'package:PiliPlus/models/common/nav_bar_config.dart';
 import 'package:PiliPlus/models/common/settings_type.dart';
+import 'package:PiliPlus/models/common/theme/font_family_type.dart';
 import 'package:PiliPlus/models/common/theme/theme_type.dart';
 import 'package:PiliPlus/pages/main/controller.dart';
 import 'package:PiliPlus/pages/mine/controller.dart';
@@ -109,6 +110,34 @@ List<SettingsModel> get styleSettings => [
     leading: const Icon(Icons.text_fields),
     onChanged: (value) {
       Get.forceAppUpdate();
+    },
+  ),
+  SettingsModel(
+    settingsType: SettingsType.normal,
+    title: '字体样式',
+    leading: const Icon(Icons.font_download_outlined),
+    getSubtitle: () => '当前样式：${Pref.fontFamilyType.desc}',
+    onTap: (setState) async {
+      final result = await showDialog<FontFamilyType>(
+        context: Get.context!,
+        builder: (context) {
+          return SelectDialog<FontFamilyType>(
+            title: '字体样式',
+            value: Pref.fontFamilyType,
+            values: FontFamilyType.values
+                .map((e) => (e, e.desc))
+                .toList(),
+          );
+        },
+      );
+      if (result != null) {
+        await GStorage.setting.put(
+          SettingBoxKey.appFontFamilyType,
+          result.index,
+        );
+        Get.forceAppUpdate();
+        setState();
+      }
     },
   ),
   SettingsModel(
